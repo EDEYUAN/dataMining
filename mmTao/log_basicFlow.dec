@@ -1,0 +1,41 @@
+﻿%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+目标:爬去淘女郎网页,获取到
+姓名 身高 体重 城市 微信 电话 相册中的照片
+
+
+爬虫的流程:
+  手动操作
+     分析页面数据:
+       1.查看源代码
+       2.是否是Ajax异步加载(打开url请求,返回的不是所有的内容,在返回的内容中还会通过JS多次的请求)
+           (俗称抓包) F12 -> network -> XHR (Headers中确定request URL,而对应的Preview下就是对应的数据) 
+           所以此处,我们找到了对应的请求URL:https://mm.taobao.com/tstar/search/tstar_model.do?_input_charset=utf-8
+       3.解密(必须熟悉前端,特别是js)
+
+	此处:
+	请求URL:https://mm.taobao.com/tstar/search/tstar_model.do?_input_charset=utf-8
+	请求方式:POST 
+	请求参数: form Data中  
+		q:
+		viewFlag:A
+		sortType:default
+		searchStyle:
+		searchRegion:city:
+		searchFansNum:
+		currentPage:1
+		pageSize:100 
+        (如果请求方式是GET,则没有请求参数)
+        异步加载,必须看response中 content-type:text/html;charset=GBK的内容是GBK编码的,所以返回的时候需要转码 decode()/encode()
+                decode()解码,把一种编码的数据转化成Unicode的编码.decode('GBK')就是把GBK的编码转化成Unicode编码
+                encode()编码,把Unicode编码的数据转化成一种编码. encode('GBK')就是把Unicode的编码转成GBK编码
+
+反爬准备: 最基本的反爬手段(判断浏览器信息 通过user-agent;为了防止通过user-agent总是不变的访问,需要使用"useragent大全",每次访问的时候,换头信息)
+
+
+       发现到下一个淘女郎的个人界面是通过userId来进去的
+       下一个页面新出现的参数,先看一下前面网页源代码中是否有,如果没有,试试f12抓包,看能否找到
+
+
+
+
+
